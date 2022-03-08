@@ -1,0 +1,40 @@
+
+const main = async()=>{
+//This will actually compile our contract and generate the necessary files we need to work with our contract under the artifacts directory.
+const [owner, randomPerson,oth] =await hre.ethers.getSigners();
+const waveContractFactory = await hre.ethers.getContractFactory("WavePortal");
+const waveContract = await waveContractFactory.deploy();
+await waveContract.deployed();
+console.log("Contract deployed to:", waveContract.address);
+console.log("contract deployed by:", owner.address);
+// console.log("this is owner object", owner);
+// console.log("this is randomPerson object", randomPerson);
+// console.log("this isoth randomPerson object", oth);
+
+/*What's happening here is Hardhat will create a local Ethereum network for us,
+ but just for this contract. Then, after the script completes it'll destroy that local network. So, every time you run the contract, it'll be a fresh blockchain. What's the point? It's kinda like refreshing your local server 
+every time so you always start from a clean slate which makes it easy to debug errors*/
+//We'll wait until our contract is officially deployed to our local blockchain! Our constructor runs when we actually deploy.
+
+
+let waveCount;
+waveCount = await waveContract.getTotalWaves();
+
+let waveTxn;
+waveTxn = await waveContract.wave();
+await waveTxn.wait();
+
+waveCount = await waveContract.getTotalWaves();
+}
+const runMain = async () => {
+    try {
+      await main();
+      process.exit(0); // exit Node process without error
+    } catch (error) {
+      console.log(error);
+      process.exit(1); // exit Node process while indicating 'Uncaught Fatal Exception' error
+    }
+    // Read more about Node exit ('process.exit(num)') status codes here: https://stackoverflow.com/a/47163396/7974948
+  };
+
+  runMain();
