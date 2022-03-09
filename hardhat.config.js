@@ -12,10 +12,17 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
+//wave portal address: 0xdF26A1B6F1D2E6E310D7770392Fa601FEE2Da00c
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
   solidity: "0.8.0",
+  networks: {
+    rinkeby: {
+      url: "https://eth-rinkeby.alchemyapi.io/v2/SgRKOLsZuNQTowEseD1vMXcWSXNCS7xB",
+      accounts: ["a025e5e4596abc9a8fc0e43103543f67f393568c1daf58c248640042ae3f2fc2"]
+    },
+  },
 };
