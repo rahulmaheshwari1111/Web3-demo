@@ -3,9 +3,15 @@ const main = async()=>{
 //This will actually compile our contract and generate the necessary files we need to work with our contract under the artifacts directory.
 
 const waveContractFactory = await hre.ethers.getContractFactory("WavePortal");
-const waveContract = await waveContractFactory.deploy();
+const waveContract = await waveContractFactory.deploy({
+  value: hre.ethers.utils.parseEther("0.1"),  //funding the contract
+});
 await waveContract.deployed();
 console.log("Contract deployed to:", waveContract.address);
+
+
+
+
 
 // console.log("this is owner object", owner);
 // console.log("this is randomPerson object", randomPerson);
@@ -17,12 +23,39 @@ every time so you always start from a clean slate which makes it easy to debug e
 //We'll wait until our contract is officially deployed to our local blockchain! Our constructor runs when we actually deploy.
 
 
+
+
+// Getting tht balance
+
+let contractBalance = await hre.ethers.provider.getBalance(waveContract.address);
+
+console.log(contractBalance, "formatted balance => " , hre.ethers.utils.formatEther(contractBalance))
+
+
+
+/* counting 
+   and
+   sending the wave */
+
+
+
 let waveCount;
 waveCount = await waveContract.getTotalWaves();
 
 let waveTxn;
 waveTxn = await waveContract.wave("A message");
 await waveTxn.wait(); //waitng for txn to mined
+
+
+  /*
+   * Get Contract balance to see what happened!
+   */
+
+  contractBalance = await hre.ethers.provider.getBalance(waveContract.address);
+  console.log("updated contract balance: ",
+  hre.ethers.utils.formatEther(contractBalance));
+
+
 
 const [_, randomPerson] = await hre.ethers.getSigners();
 waveTxn = await waveContract.connect(randomPerson).wave("another message");
@@ -32,6 +65,12 @@ await waveTxn.wait();
 let allWaves =await waveContract.getAllWaves();
 console.log(allWaves, "allwaves");
 }
+
+
+
+
+
+
 const runMain = async () => {
     try {
       await main();
