@@ -43,10 +43,11 @@ let waveCount;
 waveCount = await waveContract.getTotalWaves();
 
 let waveTxn;
-waveTxn = await waveContract.wave("A message");
+waveTxn = await waveContract.wave("this is wave 1");
 await waveTxn.wait(); //waitng for txn to mined
 
-
+const waveTxn2 = await waveContract.wave("This is wave #2");
+  await waveTxn2.wait();
   /*
    * Get Contract balance to see what happened!
    */
@@ -57,9 +58,9 @@ await waveTxn.wait(); //waitng for txn to mined
 
 
 
-const [_, randomPerson] = await hre.ethers.getSigners();
-waveTxn = await waveContract.connect(randomPerson).wave("another message");
-await waveTxn.wait();
+// const [_, randomPerson] = await hre.ethers.getSigners();
+// waveTxn = await waveContract.connect(randomPerson).wave("another message");
+// await waveTxn.wait();
 
 
 let allWaves =await waveContract.getAllWaves();
